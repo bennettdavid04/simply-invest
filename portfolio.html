@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio – Simply Invest</title>
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Simply Invest</h1>
+      <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="portfolio.html" class="active">Portfolio</a>
+        <a href="ai.html">AI Lessons</a>
+        <a href="#" id="logoutLink">Log out</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Your Portfolio</h2>
+      <p>
+        Available coins:
+        <span id="portfolioBalance"></span>
+      </p>
+      <table id="portfolioTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Symbol</th>
+            <th>Quantity</th>
+            <th>Price at Purchase</th>
+            <th>Current Price</th>
+            <th>Invested Amount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button id="updatePrices" class="btn">Update Prices</button>
+      <p id="portfolioMessage" class="message"></p>
+      <p>
+        <a href="dashboard.html">Back to Dashboard</a>
+      </p>
+    </main>
+    <footer>
+      <p>&copy; 2025 Simply Invest</p>
+    </footer>
+    <script src="static/app.js"></script>
+    <script>
+      // ensure user logged in
+      let user = getCurrentUserObject();
+      if (!user) {
+        window.location.href = 'login.html';
+      }
+      // display balance
+      document.getElementById('portfolioBalance').textContent = user.coins.toFixed(2);
+      function showPortfolio() {
+        user = getCurrentUserObject();
+        const tbody = document
+          .getElementById('portfolioTable')
+          .querySelector('tbody');
+        tbody.innerHTML = '';
+        user.portfolio.forEach((inv, index) => {
+          const row = document.createElement('tr');
+          const idxCell = document.createElement('td');
+          idxCell.textContent = index + 1;
+          const symCell = document.createElement('td');
+          symCell.textContent = inv.symbol;
+          const qtyCell = document.createElement('td');
+          qtyCell.textContent = inv.quantity.toFixed(4);
+          const priceCell = document.createElement('td');
+          priceCell.textContent = inv.priceAtPurchase.toFixed(2);
+          const currentPrice = getStockPrice(inv.symbol);
+          const currentPriceCell = document.createElement('td');
+          currentPriceCell.textContent = currentPrice.toFixed(2);
+          const investedCell = document.createElement('td');
+          investedCell.textContent = inv.investedAmount.toFixed(2);
+          const actionCell = document.createElement('td');
+          const sellBtn = document.createElement('button');
+          sellBtn.textContent = 'Sell';
+          sellBtn.classList.add('btn-small');
+          sellBtn.addEventListener('click', () => {
+            const res = sellInvestment(index);
+            const msg = document.getElementById('portfolioMessage');
+            if (res.success) {
+              msg.style.color = 'green';
+              msg.textContent =
+                'Sold holding #' + (index + 1) + ' for ' + res.value.toFixed(2) + ' coins.';
+              showPortfolio();
+              document.getElementById('portfolioBalance').textContent = getCurrentUserObject().coins.toFixed(2);
+            }
+          });
+          actionCell.appendChild(sellBtn);
+          row.appendChild(idxCell);
+          row.appendChild(symCell);
+          row.appendChild(qtyCell);
+          row.appendChild(priceCell);
+          row.appendChild(currentPriceCell);
+          row.appendChild(investedCell);
+          row.appendChild(actionCell);
+          tbody.appendChild(row);
+        });
+      }
+      showPortfolio();
+      // update prices button
+      document
+        .getElementById('updatePrices')
+        .addEventListener('click', () => {
+          updatePortfolio();
+          // refresh balance and table
+          document.getElementById('portfolioBalance').textContent = getCurrentUserObject().coins.toFixed(2);
+          showPortfolio();
+          const msg = document.getElementById('portfolioMessage');
+          msg.style.color = 'green';
+          msg.textContent = 'Portfolio updated with new prices.';
+        });
+      // logout handler
+      document
+        .getElementById('logoutLink')
+        .addEventListener('click', function (e) {
+          e.preventDefault();
+          logout();
+        });
+    </script>
+  </body>
+</html>

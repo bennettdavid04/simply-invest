@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up – Simply Invest</title>
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Simply Invest</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="register.html" class="active">Sign Up</a>
+        <a href="login.html">Login</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Create an account</h2>
+      <form id="registerForm" class="auth-form">
+        <label for="regUsername">Username</label>
+        <input type="text" id="regUsername" required />
+
+        <label for="regAge">Age (must be at least 13)</label>
+        <input type="number" id="regAge" min="13" required />
+
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" required />
+
+        <label for="regConfirm">Confirm password</label>
+        <input type="password" id="regConfirm" required />
+
+        <button type="submit" class="btn">Sign Up</button>
+      </form>
+      <p id="regMessage" class="message"></p>
+      <p>
+        Already have an account?
+        <a href="login.html">Login here</a>.
+      </p>
+    </main>
+    <footer>
+      <p>&copy; 2025 Simply Invest</p>
+    </footer>
+    <script src="static/app.js"></script>
+    <script>
+      document
+        .getElementById('registerForm')
+        .addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const username = document
+            .getElementById('regUsername')
+            .value.trim();
+          const age = parseInt(
+            document.getElementById('regAge').value,
+            10
+          );
+          const password = document.getElementById('regPassword').value;
+          const confirm = document.getElementById('regConfirm').value;
+          const msg = document.getElementById('regMessage');
+          msg.textContent = '';
+          if (password !== confirm) {
+            msg.textContent = 'Passwords do not match.';
+            return;
+          }
+          const result = await registerUser(username, age, password);
+          if (result.success) {
+            // upon successful registration, redirect to dashboard
+            window.location.href = 'dashboard.html';
+          } else {
+            msg.textContent = result.message;
+          }
+        });
+    </script>
+  </body>
+</html>

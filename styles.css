@@ -1,0 +1,147 @@
+/* Basic styling for Simply Invest */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+header {
+  background-color: #003366;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+header nav a {
+  color: white;
+  margin-right: 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+header nav a.active {
+  text-decoration: underline;
+}
+
+main {
+  padding: 20px;
+}
+
+footer {
+  background-color: #003366;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  background-color: #e0f7fa;
+  border-radius: 4px;
+}
+
+.btn,
+.btn-small {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px 0;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn:hover,
+.btn-small:hover {
+  background-color: #005999;
+}
+
+.dashboard-actions .btn {
+  margin-right: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.message {
+  margin-top: 10px;
+  color: #d32f2f;
+}
+
+.auth-form {
+  max-width: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.auth-form input {
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background-color: #007acc;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.lesson-nav {
+  margin-top: 20px;
+}
+
+.lesson-nav button {
+  margin-right: 10px;
+}
+
+.lesson-container {
+  max-width: 600px;
+  margin: auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

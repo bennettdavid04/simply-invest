@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Lessons – Simply Invest</title>
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Simply Invest</h1>
+      <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="ai.html" class="active">AI Lessons</a>
+        <a href="#" id="logoutLink">Log out</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Simply Invest Lessons</h2>
+      <div id="lessonContainer" class="lesson-container">
+        <h3 id="lessonTitle"></h3>
+        <p id="lessonText"></p>
+      </div>
+      <div class="progress-bar-container">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <div class="lesson-nav">
+        <button id="prevLesson" class="btn-small">Previous</button>
+        <button id="nextLesson" class="btn-small">Next</button>
+      </div>
+      <p>
+        <a href="dashboard.html">Back to Dashboard</a>
+      </p>
+    </main>
+    <footer>
+      <p>&copy; 2025 Simply Invest</p>
+    </footer>
+    <script src="static/app.js"></script>
+    <script>
+      // ensure user logged in
+      if (!getCurrentUserObject()) {
+        window.location.href = 'login.html';
+      }
+      // initialize lessons
+      let currentLesson = 0;
+      function renderLesson(index) {
+        const lesson = lessons[index];
+        document.getElementById('lessonTitle').textContent = lesson.title;
+        document.getElementById('lessonText').textContent = lesson.text;
+        const progressBar = document.getElementById('progressBar');
+        const percentage = ((index + 1) / lessons.length) * 100;
+        progressBar.style.width = percentage + '%';
+        // disable/enable buttons
+        document.getElementById('prevLesson').disabled = index === 0;
+        document.getElementById('nextLesson').disabled = index === lessons.length - 1;
+      }
+      document
+        .getElementById('prevLesson')
+        .addEventListener('click', () => {
+          if (currentLesson > 0) {
+            currentLesson -= 1;
+            renderLesson(currentLesson);
+          }
+        });
+      document
+        .getElementById('nextLesson')
+        .addEventListener('click', () => {
+          if (currentLesson < lessons.length - 1) {
+            currentLesson += 1;
+            renderLesson(currentLesson);
+          }
+        });
+      // initial render
+      renderLesson(currentLesson);
+      // logout handler
+      document
+        .getElementById('logoutLink')
+        .addEventListener('click', function (e) {
+          e.preventDefault();
+          logout();
+        });
+    </script>
+  </body>
+</html>

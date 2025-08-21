@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login – Simply Invest</title>
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Simply Invest</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="register.html">Sign Up</a>
+        <a href="login.html" class="active">Login</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Log in to your account</h2>
+      <form id="loginForm" class="auth-form">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" required />
+
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required />
+
+        <button type="submit" class="btn">Login</button>
+      </form>
+      <p id="loginMessage" class="message"></p>
+      <p>
+        Don't have an account?
+        <a href="register.html">Sign up here</a>.
+      </p>
+    </main>
+    <footer>
+      <p>&copy; 2025 Simply Invest</p>
+    </footer>
+    <script src="static/app.js"></script>
+    <script>
+      document
+        .getElementById('loginForm')
+        .addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const username = document
+            .getElementById('loginUsername')
+            .value.trim();
+          const password = document.getElementById('loginPassword').value;
+          const msg = document.getElementById('loginMessage');
+          msg.textContent = '';
+          const result = await loginUser(username, password);
+          if (result.success) {
+            window.location.href = 'dashboard.html';
+          } else {
+            msg.textContent = result.message;
+          }
+        });
+    </script>
+  </body>
+</html>

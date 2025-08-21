@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invest – Simply Invest</title>
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Simply Invest</h1>
+      <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html" class="active">Invest</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="ai.html">AI Lessons</a>
+        <a href="#" id="logoutLink">Log out</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Invest Your Coins</h2>
+      <p>
+        Available coins:
+        <span id="investBalance"></span>
+      </p>
+      <table id="stockTable">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Company</th>
+            <th>Current Price</th>
+            <th>Amount to invest (coins)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p id="investMessage" class="message"></p>
+      <p>
+        <a href="dashboard.html">Back to Dashboard</a>
+      </p>
+    </main>
+    <footer>
+      <p>&copy; 2025 Simply Invest</p>
+    </footer>
+    <script src="static/app.js"></script>
+    <script>
+      // ensure user logged in
+      const user = getCurrentUserObject();
+      if (!user) {
+        window.location.href = 'login.html';
+      }
+      // display coin balance
+      document.getElementById('investBalance').textContent = user.coins.toFixed(2);
+      // populate stocks table
+      const stocks = getStocks();
+      const tbody = document.getElementById('stockTable').querySelector('tbody');
+      stocks.forEach((stock) => {
+        const currentPrice = getStockPrice(stock.symbol);
+        const row = document.createElement('tr');
+        const symbolCell = document.createElement('td');
+        symbolCell.textContent = stock.symbol;
+        const nameCell = document.createElement('td');
+        nameCell.textContent = stock.name;
+        const priceCell = document.createElement('td');
+        priceCell.textContent = currentPrice.toFixed(2);
+        const amountCell = document.createElement('td');
+        const amountInput = document.createElement('input');
+        amountInput.type = 'number';
+        amountInput.min = '0';
+        amountInput.placeholder = '0';
+        amountCell.appendChild(amountInput);
+        const actionCell = document.createElement('td');
+        const investBtn = document.createElement('button');
+        investBtn.textContent = 'Invest';
+        investBtn.classList.add('btn-small');
+        investBtn.addEventListener('click', () => {
+          const amount = parseFloat(amountInput.value);
+          const msg = document.getElementById('investMessage');
+          msg.textContent = '';
+          const result = investCoins(stock.symbol, amount);
+          if (result.success) {
+            msg.style.color = 'green';
+            msg.textContent =
+              'Invested ' + amount + ' coins in ' + stock.symbol + ' at ' + result.price.toFixed(2) + ' per share.';
+            // refresh coin balance
+            const updatedUser = getCurrentUserObject();
+            document.getElementById('investBalance').textContent = updatedUser.coins.toFixed(2);
+            // reset input
+            amountInput.value = '';
+          } else {
+            msg.style.color = 'red';
+            msg.textContent = result.message;
+          }
+        });
+        actionCell.appendChild(investBtn);
+        row.appendChild(symbolCell);
+        row.appendChild(nameCell);
+        row.appendChild(priceCell);
+        row.appendChild(amountCell);
+        row.appendChild(actionCell);
+        tbody.appendChild(row);
+      });
+      // logout link handler
+      document
+        .getElementById('logoutLink')
+        .addEventListener('click', function (e) {
+          e.preventDefault();
+          logout();
+        });
+    </script>
+  </body>
+</html>
